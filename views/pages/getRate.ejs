@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<head>
+    <% include ../partials/postal_head.ejs %>
+    <% 
+        function stampedLetters(weight) {
+        if (weight >=0 && weight <= 3.5) {
+            return 0.55 + (Math.ceil(weight-1)) * .15;
+        }
+        else 
+            return null;
+        }
+
+        function meteredLetters(weight) {
+        if (weight >= 0 && weight <= 3.5) {
+            return 0.5 + (Math.ceil(weight-1)) * .15;
+        }
+        else
+            return null;
+        }
+
+        function largeEnvelopes(weight) {
+        if (weight >=0 && weight <= 13) {
+            return 1 + (Math.ceil(weight-1)) * .15;
+        }
+        else 
+            return null;
+        }
+
+        function packagePrice(weight) {
+        if (weight < 0 || weight > 13)
+            return null;
+        else if (weight <= 4)
+            return 3.66;
+        else if (weight <= 8)
+            return 4.39;
+        else if (weight <= 12)
+            return 5.19;
+        else 
+            return 5.71;
+        }
+
+        function getMailPrice(type, weight) {
+        var result;
+        if (type == "stamped")
+            result = stampedLetters(weight);
+        if (type == "metered")
+            result = meteredLetters(weight);
+        if (type == "envelope")
+            result = largeEnvelopes(weight);
+        if (type == "package")
+            result = packagePrice(weight);
+        return result == null ? "Invalid Price" : result.toFixed(2);
+        }
+    %>
+</head>
+<body>
+    <div class="content">
+        <h1>Cost information</h1>
+        <p>Weight: <%- query.weight -%></p>
+        <p>Mail Type: <%- query.mail -%></p>
+        <p>Package cost: <%- getMailPrice(query.mail,query.weight) -%></p>
+    </div>
+</body>
